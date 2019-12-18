@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -232,6 +232,7 @@ public class G10_L1_Palindrome1 : MonoBehaviour
         input.gameObject.SetActive(true);
         btn.gameObject.SetActive(true);
         reset.gameObject.SetActive(false);
+        tm.currentState = tm.states[0];
         message.text = "";
         steps.text = "step: 0";
         input.text = "";
@@ -360,7 +361,7 @@ class TransitionTable
 
 class TuringMachine
 {
-    private List<State> states = new List<State>();
+    public List<State> states = new List<State>();
     public State currentState;
     public List<char> word = new List<char>();
     public int position = 1;
