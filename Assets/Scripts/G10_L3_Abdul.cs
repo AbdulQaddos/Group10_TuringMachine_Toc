@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -73,7 +73,7 @@ public class G10_L3_Abdul : MonoBehaviour
     {
         if (tm.currentState != null)
         {
-            if (tm.currentState != "q14" || tm.lastmove != TransitionMove.H)
+            if (tm.currentState != "q10" && tm.lastmove != TransitionMove.H)
             {
                 counter = counter + 1;
                 //get next state after the machine reads the current character
@@ -92,8 +92,8 @@ public class G10_L3_Abdul : MonoBehaviour
             }
         }
         state.text = "current State: " + tm.currentState;
-        TransitionsCount.text = "Step: " + counter.ToString();
-
+        TransitionsCount.text = counter.ToString();
+      
         if (tm.currentState == "q10" && tm.lastmove == TransitionMove.H)
         {
 
@@ -158,6 +158,9 @@ public class G10_L3_Abdul : MonoBehaviour
             str = symbol + str + symbol;
             word = str.ToCharArray();
             tapeGenerate();
+            tm.tapemove = 0;
+            tm.pos = 2;
+            tm.poscube = 2;
             tm.character = word[tm.poscube];
             input.gameObject.SetActive(false);
             btn.gameObject.SetActive(false);
@@ -183,9 +186,12 @@ public class G10_L3_Abdul : MonoBehaviour
         str = "";
         input.gameObject.SetActive(true);
         btn.gameObject.SetActive(true);
+        menu.gameObject.SetActive(true);
+        counter = 0;
+        tm.currentState = "q0";
         reset.gameObject.SetActive(false);
         outputText.text = "";
-        TransitionsCount.text = "step: 0";
+        TransitionsCount.text = "Steps: 0";
         input.text = "";
     }
 
@@ -287,23 +293,31 @@ public class abdulTM
     public void exeTM()
     {
         Table stateTransitions = transitionTable.Find(x => x.states == currentState);
-        StateTr currentTransition = stateTransitions.trans.Find(x => x.readChar == character);
-        currentState = currentTransition.nxtstate;
-        writeCharacter = currentTransition.writeChar;
-        lastmove = currentTransition.move;
-        poscube = pos;
-        if (lastmove == TransitionMove.L)
+        if (stateTransitions.trans.Exists(x => x.readChar == character))
         {
-            pos = pos - 1;
-            tapemove = 1;
+            StateTr currentTransition = stateTransitions.trans.Find(x => x.readChar == character);
+            currentState = currentTransition.nxtstate;
+            writeCharacter = currentTransition.writeChar;
+            lastmove = currentTransition.move;
+            poscube = pos;
+            if (lastmove == TransitionMove.L)
+            {
+                pos = pos - 1;
+                tapemove = 1;
+            }
+            else if (lastmove == TransitionMove.R)
+            {
+                pos = pos + 1;
+                tapemove = -1;
+            }
+            else
+                tapemove = 0;
         }
-        else if (lastmove == TransitionMove.R)
-        {
-            pos = pos + 1;
-            tapemove = -1;
+        else {
+
+            lastmove = TransitionMove.H;
         }
-        else
-            tapemove = 0;
+        
     }
 }
 public struct StateTr
