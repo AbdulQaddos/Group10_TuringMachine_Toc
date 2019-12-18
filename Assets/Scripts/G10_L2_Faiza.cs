@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ public class G10_L2_Faiza : MonoBehaviour
     private char[] copytapeChar;
     Vector3 Position;
 
-    int counter = 0;
+    int TransitionCount = 0;
     int tapemove, tapemove2;
     public Vector3 header = new Vector3(-2, 2.3f, 0);
     Regex rgx = new Regex(@"[a]$");
@@ -59,7 +59,7 @@ public class G10_L2_Faiza : MonoBehaviour
         {
             if (turing.current_state != States.q13 || turing.moveCurrent1 != MoveTape.H && turing.moveCurrent2 != MoveTape.H)
             {
-                counter = counter + 1;
+                TransitionCount = TransitionCount + 1;
                 //get next state after the machine reads the current character
                 turing.Read();
                 word[turing.lastPosition1] = turing.replaceChar1;
@@ -95,9 +95,9 @@ public class G10_L2_Faiza : MonoBehaviour
 
                 header = this.transform.position;
             }
-            state.text = "current State: Q0" + turing.current_state;
-            steps.text = "Step: " + copytapeChar[turing.position2].ToString();
-            message.text = word[turing.position1].ToString();
+            state.text = "current State:" + turing.current_state;
+            steps.text = "Step: " + TransitionCount;
+           
         }
 
         if (turing.current_state == States.q13 && turing.moveCurrent1 == MoveTape.H && turing.moveCurrent2 == MoveTape.H)
@@ -192,6 +192,8 @@ public class G10_L2_Faiza : MonoBehaviour
         }
         tapeDisplay();
         tape2Display();
+        turing.position1 = 2;
+        turing.position2 = 2;
         turing.currentChar1 = word[turing.position1];
         turing.currentChar2 = copytapeChar[turing.position2];
         input.gameObject.SetActive(false);
@@ -216,6 +218,8 @@ public class G10_L2_Faiza : MonoBehaviour
         }
         str = "";
         input.text = "";
+        TransitionCount = 0;
+        turing.current_state = States.q0;
         input.gameObject.SetActive(true);
         btn.gameObject.SetActive(true);
         reset.gameObject.SetActive(false);
