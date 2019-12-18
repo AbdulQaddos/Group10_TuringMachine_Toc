@@ -1,0 +1,5 @@
+sceneSetups:
+- path: Assets/Scenes/G10_L2_Faiza.unity
+  isLoaded: 1
+  isActive: 1
+  isSubScene: 0
